@@ -3,6 +3,11 @@ version: "3.9"
 services:
   shumaxer:
     build: .
+    volumes:
+      - db_data:/app/data
     environment:
       - TOKEN=${TOKEN}
+      - DATABASE_PATH=/app/data/stickers.db 
 
+volumes:
+  db_data:
