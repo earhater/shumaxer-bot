@@ -39,7 +39,7 @@ class StickerStates(StatesGroup):
 
 # Класс для работы с базой данных
 class StickerDatabase:
-    def __init__(self, db_path: str = "stickers.db"):
+    def __init__(self, db_path: str = os.getenv("DATABASE_PATH")):
         self.db_path = db_path
         self.init_db()
 
