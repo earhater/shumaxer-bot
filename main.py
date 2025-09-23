@@ -2,6 +2,7 @@ import logging
 import sqlite3
 import asyncio
 import re
+import os
 from typing import Dict, List, Optional
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
