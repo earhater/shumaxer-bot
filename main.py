@@ -352,6 +352,7 @@ async def add_sticker_start(message: types.Message, state: FSMContext):
 @dp.message(StateFilter(StickerStates.waiting_for_associations), F.text)
 async def process_associations(message: types.Message, state: FSMContext):
     if message.chat.type != "private":
+
         return
     """Обработка введенных ассоциаций"""
     associations_text = message.text.strip()
@@ -366,7 +367,10 @@ async def process_associations(message: types.Message, state: FSMContext):
     if not associations:
         await message.answer("❌ Некорректный формат! Введите ассоциации через запятую.")
         return
-
+    for association in associations:
+        if len(association) < 3:
+            await message.answer("слишком короткая ассоциация")
+            return
     if len(associations) > 20:
         await message.answer("❌ Слишком много ассоциаций! Максимум 20.")
         return
