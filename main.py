@@ -257,6 +257,8 @@ def create_inline_keyboard_for_associations(associations: List[tuple], page: int
 
 @dp.message(Command("start"))
 async def start_command(message: types.Message):
+    if message.chat.type != "private":
+        return
     """Обработчик команды /start"""
     welcome_text = """
 🤖 <b>Добро пожаловать в бота флубильни безопасников!</b>
@@ -280,7 +282,10 @@ async def start_command(message: types.Message):
 
 @dp.message(Command("help"))
 async def help_command(message: types.Message):
+
     """Обработчик команды помощи"""
+    if message.chat.type != "private":
+        return
     help_text = """
 📖 <b>Подробная инструкция</b>
 
@@ -633,6 +638,8 @@ async def search_sticker(message: types.Message, state: FSMContext):
 
 @dp.message(Command("stats"))
 async def stats_command(message: types.Message):
+    if message.chat.type != "private":
+        return
     """Команда статистики для админов"""
     if message.from_user.id not in ADMIN_USER_IDS:
         await show_stats(message)
@@ -658,7 +665,10 @@ async def stats_command(message: types.Message):
 
 @dp.message(Command("mystickers"))
 async def mystickers_command(message: types.Message):
+
     """Команда для показа стикеров пользователя"""
+    if message.chat.type != "private":
+        return
     await show_user_stickers(message)
 
 
