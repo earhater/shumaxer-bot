@@ -320,12 +320,16 @@ async def help_command(message: types.Message):
 
 @dp.message(F.text == "❓ Помощь")
 async def help_button(message: types.Message):
+    if message.chat.type != "private":
+        return
     """Обработчик кнопки помощи"""
     await help_command(message)
 
 
 @dp.message(F.text == "➕ Добавить стикер")
 async def add_sticker_start(message: types.Message, state: FSMContext):
+    if message.chat.type != "private":
+        return
     """Начало процесса добавления стикера"""
     await state.set_state(StickerStates.waiting_for_associations)
 
@@ -347,6 +351,8 @@ async def add_sticker_start(message: types.Message, state: FSMContext):
 
 @dp.message(StateFilter(StickerStates.waiting_for_associations), F.text)
 async def process_associations(message: types.Message, state: FSMContext):
+    if message.chat.type != "private":
+        return
     """Обработка введенных ассоциаций"""
     associations_text = message.text.strip()
 
@@ -383,6 +389,8 @@ async def process_associations(message: types.Message, state: FSMContext):
 @dp.message(StateFilter(StickerStates.waiting_for_sticker), F.sticker)
 async def process_sticker(message: types.Message, state: FSMContext):
     """Обработка отправленного стикера"""
+    if message.chat.type != "private":
+        return
     data = await state.get_data()
     associations = data.get('associations', [])
 
@@ -420,6 +428,8 @@ async def process_sticker(message: types.Message, state: FSMContext):
 
 @dp.message(StateFilter(StickerStates.waiting_for_sticker))
 async def wrong_content_for_sticker(message: types.Message, state: FSMContext):
+    if message.chat.type != "private":
+        return
     """Обработка неправильного контента вместо стикера"""
     if message.text:
         await message.answer("❌ Пожалуйста, отправьте именно стикер, а не текст!")
@@ -429,6 +439,8 @@ async def wrong_content_for_sticker(message: types.Message, state: FSMContext):
 
 @dp.message(F.text == "📋 Мои стикеры")
 async def show_user_stickers(message: types.Message):
+    if message.chat.type != "private":
+        return
     """Показать стикеры пользователя"""
     user_id = message.from_user.id
     associations = db.get_user_associations(user_id)
@@ -468,6 +480,8 @@ async def show_user_stickers(message: types.Message):
 
 @dp.message(F.text == "📊 Статистика")
 async def show_stats(message: types.Message):
+    if message.chat.type != "private":
+        return
     """Показать статистику"""
     stats = db.get_stats()
     user_associations = db.get_user_associations(message.from_user.id)
@@ -500,6 +514,8 @@ async def show_stats(message: types.Message):
 
 @dp.callback_query(F.data.startswith("del_"))
 async def delete_association_callback(callback: types.CallbackQuery):
+    if callback.chat.type != "private":
+        return
     """Обработка удаления ассоциации"""
     try:
         data_parts = callback.data.split("_")
@@ -570,6 +586,8 @@ async def delete_association_callback(callback: types.CallbackQuery):
 
 @dp.callback_query(F.data.startswith("page_"))
 async def pagination_callback(callback: types.CallbackQuery):
+    if callback.chat.type != "private":
+        return
     """Обработка пагинации"""
     try:
         page = int(callback.data.split("_")[1])
@@ -675,6 +693,8 @@ async def mystickers_command(message: types.Message):
 # Обработка ошибок
 @dp.error()
 async def error_handler(event, exception):
+    if event.chat.type != "private":
+        return
     """Глобальный обработчик ошибок"""
     logger.error(f"Error occurred: {exception}")
 
