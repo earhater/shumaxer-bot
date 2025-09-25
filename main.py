@@ -618,6 +618,7 @@ async def pagination_callback(callback: types.CallbackQuery):
 # Основной обработчик текстовых сообщений для поиска стикеров
 @dp.message(F.text)
 async def search_sticker(message: types.Message, state: FSMContext):
+    print(message.chat.id)
     """Поиск и отправка стикера по тексту"""
     # Проверяем, не находимся ли мы в состоянии ввода данных
     current_state = await state.get_state()
